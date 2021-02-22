@@ -42,4 +42,18 @@ public class PetClinicControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(animalResponseDto)));
     }
+
+    @Test
+    public void registerNameValidationTest() throws Exception {
+        AnimalDto animalDto = new AnimalDto();
+        animalDto.setAge(2);
+
+        petClinicController.perform(post("/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(animalDto))
+        ).andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+
 }
