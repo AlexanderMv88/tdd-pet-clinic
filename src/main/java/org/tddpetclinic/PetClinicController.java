@@ -11,6 +11,10 @@ public class PetClinicController {
 
     @PostMapping("/register")
     public ResponseEntity<AnimalDto> regiter(@RequestBody AnimalDto animalDto){
-        return new ResponseEntity<>(animalDto, HttpStatus.CREATED);
+        AnimalResponseDto animalResponseDto = new AnimalResponseDto();
+        animalResponseDto.setId(1L);
+        animalResponseDto.setName(animalDto.getName());
+        animalResponseDto.setAge(animalDto.getAge());
+        return new ResponseEntity<>(animalResponseDto, HttpStatus.CREATED);
     }
 }
