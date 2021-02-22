@@ -1,4 +1,4 @@
-package org.tddpetclinic;
+package org.tddpetclinic.dto;
 
 import lombok.Data;
 

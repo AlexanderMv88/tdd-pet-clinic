@@ -8,6 +8,10 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.tddpetclinic.controller.PetController;
+import org.tddpetclinic.dto.ErrorDto;
+import org.tddpetclinic.dto.PetDto;
+import org.tddpetclinic.dto.PetResponseDto;
 
 import java.nio.charset.StandardCharsets;
 
@@ -17,8 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(value = PetClinicController.class)
-public class PetClinicControllerTest {
+@WebMvcTest(value = PetController.class)
+public class PetControllerTest {
 
     @Autowired
     protected ObjectMapper objectMapper;
@@ -28,18 +32,18 @@ public class PetClinicControllerTest {
 
     @Test
     public void registerTest() throws Exception {
-        AnimalDto animalDto = new AnimalDto();
-        animalDto.setAge(2);
-        animalDto.setName("Вольт");
+        PetDto petDto = new PetDto();
+        petDto.setAge(2);
+        petDto.setName("Вольт");
 
-        AnimalResponseDto animalResponseDto = new AnimalResponseDto();
+        PetResponseDto animalResponseDto = new PetResponseDto();
         animalResponseDto.setId(1L);
         animalResponseDto.setAge(2);
         animalResponseDto.setName("Вольт");
 
         petClinicController.perform(post("/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(animalDto))
+                .content(objectMapper.writeValueAsString(petDto))
         ).andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -48,14 +52,14 @@ public class PetClinicControllerTest {
 
     @Test
     public void registerNameValidationTest() throws Exception {
-        AnimalDto animalDto = new AnimalDto();
-        animalDto.setAge(2);
+        PetDto petDto = new PetDto();
+        petDto.setAge(2);
 
         ErrorDto errorDto = new ErrorDto();
         errorDto.setMessage("Введите кличку");
         MockHttpServletResponse response = petClinicController.perform(post("/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(animalDto))
+                .content(objectMapper.writeValueAsString(petDto))
         ).andDo(print())
                 .andExpect(status().isBadRequest()).andReturn().getResponse();
 
@@ -65,14 +69,14 @@ public class PetClinicControllerTest {
 
     @Test
     public void registerAgeValidationTest() throws Exception {
-        AnimalDto animalDto = new AnimalDto();
-        animalDto.setName("Вольт");
+        PetDto petDto = new PetDto();
+        petDto.setName("Вольт");
 
         ErrorDto errorDto = new ErrorDto();
         errorDto.setMessage("Введите возраст");
         MockHttpServletResponse response = petClinicController.perform(post("/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(animalDto))
+                .content(objectMapper.writeValueAsString(petDto))
         ).andDo(print())
                 .andExpect(status().isBadRequest()).andReturn().getResponse();
 
