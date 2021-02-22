@@ -5,10 +5,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
+import java.nio.charset.StandardCharsets;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,11 +51,16 @@ public class PetClinicControllerTest {
         AnimalDto animalDto = new AnimalDto();
         animalDto.setAge(2);
 
-        petClinicController.perform(post("/register")
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setMessage("Введите кличку");
+        MockHttpServletResponse response = petClinicController.perform(post("/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(animalDto))
         ).andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest()).andReturn().getResponse();
+
+        String contentAsString = response.getContentAsString(StandardCharsets.UTF_8);
+        assertEquals(objectMapper.writeValueAsString(errorDto), contentAsString);
     }
 
 
