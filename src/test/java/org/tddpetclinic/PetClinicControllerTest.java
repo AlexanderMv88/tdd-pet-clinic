@@ -63,5 +63,22 @@ public class PetClinicControllerTest {
         assertEquals(objectMapper.writeValueAsString(errorDto), contentAsString);
     }
 
+    @Test
+    public void registerAgeValidationTest() throws Exception {
+        AnimalDto animalDto = new AnimalDto();
+        animalDto.setName("Вольт");
+
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setMessage("Введите возраст");
+        MockHttpServletResponse response = petClinicController.perform(post("/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(animalDto))
+        ).andDo(print())
+                .andExpect(status().isBadRequest()).andReturn().getResponse();
+
+        String contentAsString = response.getContentAsString(StandardCharsets.UTF_8);
+        assertEquals(objectMapper.writeValueAsString(errorDto), contentAsString);
+    }
+
 
 }
