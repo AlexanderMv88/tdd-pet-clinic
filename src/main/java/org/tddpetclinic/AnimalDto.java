@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class AnimalDto {
 
-    private String name;
-    private Integer age;
+    protected String name;
+    protected Integer age;
 
 }

@@ -29,12 +29,17 @@ public class PetClinicControllerTest {
         animalDto.setAge(2);
         animalDto.setName("Вольт");
 
+        AnimalResponseDto animalResponseDto = new AnimalResponseDto();
+        animalResponseDto.setId(1L);
+        animalResponseDto.setAge(2);
+        animalResponseDto.setName("Вольт");
+
         petClinicController.perform(post("/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(animalDto))
         ).andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(animalDto)));
+                .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(animalResponseDto)));
     }
 }
