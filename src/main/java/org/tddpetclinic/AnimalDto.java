@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class AnimalDto {
-    @NotBlank
+    @NotBlank(message = "Введите кличку")
     protected String name;
     protected Integer age;
 
