@@ -28,4 +28,8 @@ public class PetService {
         petResponseDto.setAge(savedPet.getAge());
         return petResponseDto;
     }
+
+    public PetResponseDto save(Long petId, PetDto petDto) {
+        return new PetResponseDto();
+    }
 }
