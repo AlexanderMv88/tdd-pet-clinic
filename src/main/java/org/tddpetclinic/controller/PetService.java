@@ -22,14 +22,24 @@ public class PetService {
         pet.setAge(petDto.getAge());
         Pet savedPet = petRepository.save(pet);
 
+        return mapResponseDto(savedPet);
+    }
+
+    public PetResponseDto save(Long petId, PetDto petDto) {
+        Pet pet = new Pet();
+        pet.setId(petId);
+        pet.setName(petDto.getName());
+        pet.setAge(petDto.getAge());
+        Pet savedPet = petRepository.save(pet);
+
+        return mapResponseDto(savedPet);
+    }
+
+    private PetResponseDto mapResponseDto(Pet savedPet) {
         PetResponseDto petResponseDto = new PetResponseDto();
         petResponseDto.setId(savedPet.getId());
         petResponseDto.setName(savedPet.getName());
         petResponseDto.setAge(savedPet.getAge());
         return petResponseDto;
-    }
-
-    public PetResponseDto save(Long petId, PetDto petDto) {
-        return new PetResponseDto();
     }
 }

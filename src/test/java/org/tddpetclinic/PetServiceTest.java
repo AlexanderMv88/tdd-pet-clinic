@@ -51,6 +51,7 @@ public class PetServiceTest {
     @Test
     public void savePetDataTest(){
         Pet pet = new Pet();
+        pet.setId(1L);
         pet.setName(PET_NAME);
         pet.setAge(PET_AGE);
 
