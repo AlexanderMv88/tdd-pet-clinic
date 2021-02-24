@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.tddpetclinic.controller.PetController;
+import org.tddpetclinic.controller.PetService;
 import org.tddpetclinic.dto.ErrorDto;
 import org.tddpetclinic.dto.PetDto;
 import org.tddpetclinic.dto.PetResponseDto;
@@ -16,6 +18,7 @@ import org.tddpetclinic.dto.PetResponseDto;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -30,6 +33,9 @@ public class PetControllerTest {
     @Autowired
     protected ObjectMapper objectMapper;
 
+    @MockBean
+    private PetService petService;
+
     @Autowired
     private MockMvc petClinicController;
 
@@ -43,6 +49,8 @@ public class PetControllerTest {
         animalResponseDto.setId(1L);
         animalResponseDto.setAge(2);
         animalResponseDto.setName("Вольт");
+
+        when(petService.save(petDto)).thenReturn(animalResponseDto);
 
         petClinicController.perform(post(PET_URL)
                 .contentType(MediaType.APPLICATION_JSON)
