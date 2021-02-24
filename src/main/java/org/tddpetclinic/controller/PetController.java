@@ -15,12 +15,15 @@ import javax.validation.Valid;
 @RequestMapping("/pet")
 public class PetController {
 
+    private final PetService petService;
+
+    public PetController(PetService petService) {
+        this.petService = petService;
+    }
+
     @PostMapping
     public ResponseEntity<PetDto> regiter(@RequestBody @Valid PetDto petDto){
-        PetResponseDto animalResponseDto = new PetResponseDto();
-        animalResponseDto.setId(1L);
-        animalResponseDto.setName(petDto.getName());
-        animalResponseDto.setAge(petDto.getAge());
+        PetResponseDto animalResponseDto = petService.save(petDto);
         return new ResponseEntity<>(animalResponseDto, HttpStatus.CREATED);
     }
 }
