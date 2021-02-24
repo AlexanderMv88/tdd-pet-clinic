@@ -16,6 +16,7 @@ import org.tddpetclinic.dto.PetResponseDto;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,6 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(value = PetController.class)
 public class PetControllerTest {
+
+    public static final String PET_URL = "/pet";
 
     @Autowired
     protected ObjectMapper objectMapper;
@@ -41,7 +44,7 @@ public class PetControllerTest {
         animalResponseDto.setAge(2);
         animalResponseDto.setName("Вольт");
 
-        petClinicController.perform(post("/register")
+        petClinicController.perform(post(PET_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(petDto))
         ).andDo(print())
@@ -57,7 +60,7 @@ public class PetControllerTest {
 
         ErrorDto errorDto = new ErrorDto();
         errorDto.setMessage("Введите кличку");
-        MockHttpServletResponse response = petClinicController.perform(post("/register")
+        MockHttpServletResponse response = petClinicController.perform(post(PET_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(petDto))
         ).andDo(print())
@@ -74,7 +77,7 @@ public class PetControllerTest {
 
         ErrorDto errorDto = new ErrorDto();
         errorDto.setMessage("Введите возраст");
-        MockHttpServletResponse response = petClinicController.perform(post("/register")
+        MockHttpServletResponse response = petClinicController.perform(post(PET_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(petDto))
         ).andDo(print())
@@ -83,6 +86,4 @@ public class PetControllerTest {
         String contentAsString = response.getContentAsString(StandardCharsets.UTF_8);
         assertEquals(objectMapper.writeValueAsString(errorDto), contentAsString);
     }
-
-
 }
