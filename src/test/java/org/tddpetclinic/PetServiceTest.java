@@ -27,7 +27,7 @@ public class PetServiceTest {
     private PetService petService;
 
     @Test
-    public void saveTest(){
+    public void saveNewTest(){
         Pet pet = new Pet();
         pet.setName(PET_NAME);
         pet.setAge(PET_AGE);
@@ -43,6 +43,28 @@ public class PetServiceTest {
         petDto.setAge(PET_AGE);
 
         PetResponseDto petResponseDto = petService.save(petDto);
+        assertEquals(1L, petResponseDto.getId());
+        assertEquals(PET_NAME, petResponseDto.getName());
+        assertEquals(PET_AGE, petResponseDto.getAge());
+    }
+
+    @Test
+    public void savePetDataTest(){
+        Pet pet = new Pet();
+        pet.setName(PET_NAME);
+        pet.setAge(PET_AGE);
+
+        Pet petSaved = new Pet();
+        petSaved.setId(1L);
+        petSaved.setName(PET_NAME);
+        petSaved.setAge(PET_AGE);
+        when(petRepository.save(pet)).thenReturn(petSaved);
+
+        PetDto petDto = new PetDto();
+        petDto.setName(PET_NAME);
+        petDto.setAge(PET_AGE);
+
+        PetResponseDto petResponseDto = petService.save(1L, petDto);
         assertEquals(1L, petResponseDto.getId());
         assertEquals(PET_NAME, petResponseDto.getName());
         assertEquals(PET_AGE, petResponseDto.getAge());
