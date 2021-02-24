@@ -19,13 +19,13 @@ public class PetController {
     }
 
     @PostMapping
-    public ResponseEntity<PetDto> regiter(@RequestBody @Valid PetDto petDto){
+    public ResponseEntity<PetResponseDto> regiter(@RequestBody @Valid PetDto petDto){
         PetResponseDto animalResponseDto = petService.save(petDto);
         return new ResponseEntity<>(animalResponseDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PetDto> changePetData(@PathVariable Long id,
+    public ResponseEntity<PetResponseDto> changePetData(@PathVariable Long id,
                                                 @RequestBody @Valid PetDto petDto) {
         PetResponseDto petResponseDto = petService.save(id, petDto);
         return new ResponseEntity<>(petResponseDto, HttpStatus.OK);
