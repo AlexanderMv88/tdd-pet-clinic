@@ -1,6 +1,5 @@
 package org.tddpetclinic;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,16 +13,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 public class PetIntegrationTest {
-
+    //TODO: думать о тестировании через TestRestTemplate restTemplate = new TestRestTemplate();
     @Autowired
     private PetController petController;
+
+    public static final String HISTORY = "Некая история болезни";
 
     @Test
     public void registrationTest() {
         PetDto petDto1 = createPetDto("Кот", 9);
         PetResponseDto expectedResponseDto1 = getPetResponseDto(1L, "Кот", 9);
 
-        ResponseEntity<PetResponseDto> registered1 = petController.regiter(petDto1);
+        ResponseEntity<PetResponseDto> registered1 = petController.register(petDto1);
 
         assertEquals(HttpStatus.CREATED, registered1.getStatusCode());
         assertEquals(expectedResponseDto1, registered1.getBody());
@@ -32,7 +33,7 @@ public class PetIntegrationTest {
         PetDto petDto2 = createPetDto("Вольт", 2);
         PetResponseDto expectedResponseDto2 = getPetResponseDto(2L, "Вольт", 2);
 
-        ResponseEntity<PetResponseDto> registered2 = petController.regiter(petDto2);
+        ResponseEntity<PetResponseDto> registered2 = petController.register(petDto2);
 
         assertEquals(HttpStatus.CREATED, registered2.getStatusCode());
         assertEquals(expectedResponseDto2, registered2.getBody());
@@ -44,7 +45,7 @@ public class PetIntegrationTest {
         PetDto petDto1 = createPetDto("Барсик", 1);
         PetResponseDto expectedResponseDto1 = getPetResponseDto(1L, "Барсик", 1);
 
-        ResponseEntity<PetResponseDto> registered1 = petController.regiter(petDto1);
+        ResponseEntity<PetResponseDto> registered1 = petController.register(petDto1);
 
         Long id = registered1.getBody().getId();
 
@@ -61,7 +62,7 @@ public class PetIntegrationTest {
     public void findPetDataTest() {
         PetDto petDto = createPetDto("Котэ", 7);
 
-        ResponseEntity<PetResponseDto> registered = petController.regiter(petDto);
+        ResponseEntity<PetResponseDto> registered = petController.register(petDto);
         Long id = registered.getBody().getId();
         PetResponseDto expectedResponseDto = getPetResponseDto(id, "Котэ", 7);
 
@@ -77,6 +78,7 @@ public class PetIntegrationTest {
         animalResponseDto.setId(id);
         animalResponseDto.setAge(age);
         animalResponseDto.setName(name);
+        animalResponseDto.setHistory(HISTORY);
         return animalResponseDto;
     }
 
@@ -85,6 +87,7 @@ public class PetIntegrationTest {
         PetDto petDto = new PetDto();
         petDto.setAge(age);
         petDto.setName(name);
+        petDto.setHistory(HISTORY);
         return petDto;
     }
 

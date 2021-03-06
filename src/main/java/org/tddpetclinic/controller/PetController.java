@@ -25,7 +25,7 @@ public class PetController {
     }
 
     @PostMapping
-    public ResponseEntity<PetResponseDto> regiter(@RequestBody @Valid PetDto petDto){
+    public ResponseEntity<PetResponseDto> register(@RequestBody @Valid PetDto petDto){
         PetResponseDto animalResponseDto = petService.save(petDto);
         return new ResponseEntity<>(animalResponseDto, HttpStatus.CREATED);
     }
