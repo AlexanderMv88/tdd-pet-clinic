@@ -22,6 +22,7 @@ public class PetService {
         Pet pet = new Pet();
         pet.setName(petDto.getName());
         pet.setAge(petDto.getAge());
+        pet.setHistory(petDto.getHistory());
         Pet savedPet = petRepository.save(pet);
 
         return mapResponseDto(savedPet);
@@ -32,6 +33,7 @@ public class PetService {
         pet.setId(petId);
         pet.setName(petDto.getName());
         pet.setAge(petDto.getAge());
+        pet.setHistory(petDto.getHistory());
         Pet savedPet = petRepository.save(pet);
 
         return mapResponseDto(savedPet);
@@ -42,6 +44,7 @@ public class PetService {
         petResponseDto.setId(savedPet.getId());
         petResponseDto.setName(savedPet.getName());
         petResponseDto.setAge(savedPet.getAge());
+        petResponseDto.setHistory(savedPet.getHistory());
         return petResponseDto;
     }
 
