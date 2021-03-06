@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.util.StringUtils;
 import org.tddpetclinic.controller.PetController;
 import org.tddpetclinic.controller.PetService;
 import org.tddpetclinic.dto.ErrorDto;
@@ -19,8 +20,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -93,5 +93,50 @@ public class PetControllerTest {
 
         String contentAsString = response.getContentAsString(StandardCharsets.UTF_8);
         assertEquals(objectMapper.writeValueAsString(errorDto), contentAsString);
+    }
+
+    @Test
+    public void changePetDataTest() throws Exception {
+        Long petId = 10L;
+
+        PetDto petDto = new PetDto();
+        petDto.setAge(4);
+        petDto.setName("Барсик");
+
+        PetResponseDto animalResponseDto = new PetResponseDto();
+        animalResponseDto.setId(petId);
+        animalResponseDto.setAge(4);
+        animalResponseDto.setName("Барсик");
+
+        when(petService.save(petId, petDto)).thenReturn(animalResponseDto);
+
+        String url = String.format("%s/%d", PET_URL, petId);
+
+        petClinicController.perform(put(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(petDto))
+        ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(animalResponseDto)));
+    }
+
+    @Test
+    public void getPetDataTest() throws Exception {
+        Long petId = 10L;
+
+        PetResponseDto animalResponseDto = new PetResponseDto();
+        animalResponseDto.setId(petId);
+        animalResponseDto.setAge(4);
+        animalResponseDto.setName("Барсик");
+
+        when(petService.search(petId)).thenReturn(animalResponseDto);
+        String url = String.format("%s/%d", PET_URL, petId);
+
+        petClinicController.perform(get(url))
+        .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(animalResponseDto)));
     }
 }
