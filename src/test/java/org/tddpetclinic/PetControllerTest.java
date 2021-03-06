@@ -120,4 +120,23 @@ public class PetControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(animalResponseDto)));
     }
+
+    @Test
+    public void getPetDataTest() throws Exception {
+        Long petId = 10L;
+
+        PetResponseDto animalResponseDto = new PetResponseDto();
+        animalResponseDto.setId(petId);
+        animalResponseDto.setAge(4);
+        animalResponseDto.setName("Барсик");
+
+        when(petService.search(petId)).thenReturn(animalResponseDto);
+        String url = String.format("%s/%d", PET_URL, petId);
+
+        petClinicController.perform(get(url))
+        .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(animalResponseDto)));
+    }
 }

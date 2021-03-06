@@ -57,6 +57,20 @@ public class PetIntegrationTest {
         assertEquals(expectedResponseDto2, registered2.getBody());
     }
 
+    @Test
+    public void findPetDataTest() {
+        PetDto petDto = createPetDto("Котэ", 7);
+
+        ResponseEntity<PetResponseDto> registered = petController.regiter(petDto);
+        Long id = registered.getBody().getId();
+        PetResponseDto expectedResponseDto = getPetResponseDto(id, "Котэ", 7);
+
+        ResponseEntity<PetResponseDto> response = petController.getPetData(id);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expectedResponseDto, response.getBody());
+    }
+
 
     private PetResponseDto getPetResponseDto(Long id, String name, Integer age) {
         PetResponseDto animalResponseDto = new PetResponseDto();

@@ -18,6 +18,12 @@ public class PetController {
         this.petService = petService;
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PetResponseDto> getPetData(@PathVariable Long id) {
+        PetResponseDto petResponseDto = petService.search(id);
+        return new ResponseEntity<>(petResponseDto, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<PetResponseDto> regiter(@RequestBody @Valid PetDto petDto){
         PetResponseDto animalResponseDto = petService.save(petDto);

@@ -12,6 +12,8 @@ import org.tddpetclinic.dto.PetDto;
 import org.tddpetclinic.dto.PetResponseDto;
 import org.tddpetclinic.entity.Pet;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -67,6 +69,24 @@ public class PetServiceTest {
 
         PetResponseDto petResponseDto = petService.save(1L, petDto);
         assertEquals(1L, petResponseDto.getId());
+        assertEquals(PET_NAME, petResponseDto.getName());
+        assertEquals(PET_AGE, petResponseDto.getAge());
+    }
+
+
+    @Test
+    public void searchPetDataTest(){
+        Long petId = 1L;
+
+        Pet pet = new Pet();
+        pet.setId(petId);
+        pet.setName(PET_NAME);
+        pet.setAge(PET_AGE);
+        when(petRepository.findById(petId)).thenReturn(Optional.of(pet));
+
+        PetResponseDto petResponseDto = petService.search(petId);
+
+        assertEquals(petId, petResponseDto.getId());
         assertEquals(PET_NAME, petResponseDto.getName());
         assertEquals(PET_AGE, petResponseDto.getAge());
     }

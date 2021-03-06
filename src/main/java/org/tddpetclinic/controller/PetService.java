@@ -7,6 +7,8 @@ import org.tddpetclinic.dto.PetDto;
 import org.tddpetclinic.dto.PetResponseDto;
 import org.tddpetclinic.entity.Pet;
 
+import java.util.Optional;
+
 @Service
 public class PetService {
 
@@ -41,5 +43,11 @@ public class PetService {
         petResponseDto.setName(savedPet.getName());
         petResponseDto.setAge(savedPet.getAge());
         return petResponseDto;
+    }
+
+    public PetResponseDto search(Long petId) throws RuntimeException {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new RuntimeException("Ошибка"));
+        return mapResponseDto(pet);
     }
 }
